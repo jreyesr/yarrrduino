@@ -364,7 +364,7 @@ void serviceuser(void) {
         /*case 'b':
             set_baud_rate();
             break;*/
-        
+
         case 'o':
           set_display_mode();
           break;
@@ -498,18 +498,18 @@ void serviceuser(void) {
         case 'w':
           switch_psu_off();
           break;
-        /*
-                           case 'd': // ADC single-shot, NOPE
-                               MSG_ADC_VOLTAGE_PROBE_HEADER;
-                               bp_adc_probe();
-                               MSG_VOLTAGE_UNIT;
-                               bpBR;
-                               break;
 
-                           case 'D': // ADC continuous, NOPE
-                               bp_adc_continuous_probe();
-                               break;
-        */
+        case 'd': // ADC single-shot
+          MSG_ADC_VOLTAGE_PROBE_HEADER;
+          bp_adc_probe();
+          MSG_VOLTAGE_UNIT;
+          bpBR;
+          break;
+
+        case 'D': // ADC continuous
+          bp_adc_continuous_probe();
+          break;
+
         case '&':
           repeat = getrepeat();
           BPMSG1099;

@@ -36,7 +36,7 @@ extern "C" {
 #define BP_AUX0 PORTDbits.pd6   // moved pin5 (AUX) to RC1
 #define BP_AUX0_PIN PINDbits.pind6   // moved pin5 (AUX) to RC1
 #define BP_LEDMODE PORTCbits.pc0 // single MODE led on v2a
-#define BP_VREGEN PORTCbits.pc1  // single vreg enable pin on v2a
+#define BP_VREGEN PORTBbits.pb5  // single vreg enable pin on v2a
 #define BP_PULLUP PORTCbits.pc2 // Pull-up pin on V2a
 //#define BP_PGD PORTCbits.pc3    // PGD pin on programming header
 
@@ -47,9 +47,12 @@ extern "C" {
 #define BP_CS_DIR DDRDbits.ddd5
 #define BP_AUX0_DIR DDRDbits.ddd6
 #define BP_LEDMODE_DIR DDRCbits.ddc0
-#define BP_VREGEN_DIR DDRCbits.ddc1
+#define BP_VREGEN_DIR DDRBbits.ddb5
 #define BP_PULLUP_DIR DDRCbits.ddc2
 //#define BP_PGD_DIR DDRCbits.ddc3
+
+// ADC assignment
+#define BP_ADC_PROBE 1 // Pin A1
 
     static inline void bp_enable_usb_led(void) {
     }
@@ -60,7 +63,19 @@ extern "C" {
     static inline void bp_toggle_usb_led(void) {
     }
 
-    static inline void bp_enable_mode_led(void) {
+    static inline void bp_enable_adc(void) { ADCSRAbits.aden = ON; }
+
+    static inline void bp_disable_adc(void) { ADCSRAbits.aden = OFF; }
+
+    static inline void bp_set_adc_state(bool state) {
+      if (state == ON) {
+        bp_enable_adc();
+      } else {
+        bp_disable_adc();
+      }
+    }
+
+    /*static inline void bp_enable_mode_led(void) {
         BP_LEDMODE_DIR = OUTPUT;
         BP_LEDMODE = ON;
     }
@@ -81,7 +96,7 @@ extern "C" {
     static inline void bp_toggle_mode_led(void) {
         BP_LEDMODE_DIR = OUTPUT;
         BP_LEDMODE ^= ON;
-    }
+    }*/
 
     static inline void bp_enable_pullup(void) {
         BP_PULLUP_DIR = INPUT;

@@ -180,6 +180,31 @@ void bp_write_bin_byte(const uint8_t value) {
     }
 }
 
+void bp_write_voltage(const uint16_t adc) {
+  /*
+   * Input voltage is compared to 5v.  With:
+   *
+   * volts      = adc / 1024 * 5v
+   * centivolts = volts * 100
+   *
+   * approximation is (adc * 500) / 1024. After simplification, the ratio can
+   * be written as (adc * 125) / 256, making the final calculation result fit
+   * inside an unsigned 32 bits integer. The measurement error is less than
+   * 5mV.
+   */
+  const uint32_t centivolts = (adc * 125UL) / 256UL;
+
+  uint8_t value;
+
+  bp_write_dec_byte(centivolts / 100);
+  user_serial_transmit_character('.');
+  value = centivolts % 100;
+  if (value < 10) {
+    user_serial_transmit_character('0');
+  }
+  bp_write_dec_byte(value);
+}
+
 uint8_t user_serial_read_byte(void) {
     while (!user_serial_ready_to_read());
 
@@ -236,7 +261,7 @@ void bp_reset_board_state(void) {
     BP_MISO_DIR = INPUT;
     BP_CS_DIR = INPUT;
     BP_AUX0_DIR = INPUT;
-    bp_disable_mode_led();
+    // bp_disable_mode_led();
     bp_enable_usb_led();
 
     /* Detach source from the currently-set AUX pin. */
@@ -246,4 +271,64 @@ void bp_reset_board_state(void) {
     clear_mode_configuration();
     bp_disable_pullup();
     bp_disable_voltage_regulator();
+
+    ADCSRA = 0b00000111;      // Disable ADC, pre-scaler = 128
+    ADMUX  = 0b01001111;      // Use AVCC (5V) as Vref, connect GND to the ADC mux
+}
+
+uint16_t bp_read_adc(const uint16_t channel) {
+
+  /* Set channel. */
+  ADMUX = (ADMUX & 0xf0) | (channel & 0x0f);
+
+  /* Trigger sample. */
+  ADCSRAbits.adsc = ON;
+
+
+  /* Wait for conversion to finish. */
+  while (ADCSRAbits.adsc == ON);
+
+  /* Return value. */
+  return ADC;
+}
+
+void bp_adc_probe(void) {
+  /* Turn the ADC on. */
+  bp_enable_adc();
+
+  /* Perform the measurement. */
+  bp_write_voltage(bp_read_adc(BP_ADC_PROBE));
+
+  /* Turn the ADC off. */
+  bp_disable_adc();
+}
+
+void bp_adc_continuous_probe(void) {
+  uint16_t measurement;
+
+  MSG_ADC_VOLTMETER_MODE;
+  MSG_ANY_KEY_TO_EXIT_PROMPT;
+  MSG_ADC_VOLTAGE_PROBE_HEADER;
+  bp_write_voltage(0);
+  MSG_VOLTAGE_UNIT;
+
+  /* Perform ADC probes until a character is sent to the serial port. */
+  while (!user_serial_ready_to_read()) {
+    bp_enable_adc();
+
+    measurement = bp_read_adc(BP_ADC_PROBE);
+
+    bp_disable_adc();
+
+    /* Erase previous measurement. */
+    bp_write_string("\x08\x08\x08\x08\x08");
+
+    /* Print new measurement. */
+    bp_write_voltage(measurement);
+    MSG_VOLTAGE_UNIT;
+  }
+
+  /* Flush the incoming serial buffer. */
+  user_serial_read_byte();
+  bpBR;
 }
