@@ -151,10 +151,6 @@ uint16_t bitbang_read_value(void) {
   for (count = 0; count < mode_configuration.numbits; count++) {
     bitbang_set_pins_high(CLK, delay_profile->clock);
     value = (value << 1) | bitbang_read_pin(MOSI);
-
-    bp_write_string("Read ");
-    bp_write_string(bitbang_read_pin(MOSI) ? "1" : "0");
-    bp_write_line("");
     bitbang_set_pins_low(CLK, delay_profile->clock);
   }
 
@@ -265,21 +261,9 @@ void bitbang_set_pins(const bool state, const uint16_t pins_mask,
 }
 
 bool bitbang_read_pin(const uint16_t pin_bit) {
-  bp_write_string("Reading pin ");
-  bp_write_bin_byte(pin_bit);
-  bp_write_line("");
   IODIR &= ~pin_bit;
   __nop();
   __nop();
   __nop();
-  bp_write_hex_byte(IODIR);
-  bp_write_hex_byte(PORTD);
-  bp_write_string("=");
-  bp_write_bin_byte(IODIR);
-  bp_write_string(" ");
-  bp_write_hex_byte(IOPOR);
-  bp_write_string("=");
-  bp_write_bin_byte(IOPOR);
-  bp_write_line("");
   return IOPOR & pin_bit;
 }

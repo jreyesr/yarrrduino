@@ -24,8 +24,8 @@
 extern "C" {
 #endif
 
-//#define BP_FIRMWARE_STRING "Community Firmware v7.1 - goo.gl/gCzQnW - Modified by jreyesr "
-#define BP_FIRMWARE_STRING "No space!"
+#define BP_FIRMWARE_STRING "Community Firmware v7.1 - goo.gl/gCzQnW - Modified by jreyesr "
+//#define BP_FIRMWARE_STRING "No space!"
 
         /**
      * @brief Current mode configuration settings structure.
