@@ -1,16 +1,22 @@
 # Yarrrduino: a Bus Pirate, but for Arduino
 // TODO Basic explanation
 
+## Pins
+
+// TOdo add pinout when code is finalized!
+
 ## Implemented functionality
 
 * Menu navigation works.
-* The `raw2wire` protocol is fully implemented. That should mean I2C too.
+* The `raw2wire` protocol is fully implemented. That should mean I2C too, but the hard way.
+* ADC measurements work (both single measurements and continuous).
 
 ## Pending/won't implement functionality
 
 ### Pending but planned
 
-* There is no ADC measurement. It _may_ be implemented later.
+* There is no ADC measurement of voltage rails (for example, to detect a shorted VREG). It _may_ be implemented later, since the ADC already works.
+* Dedicated (soft) I2C support is a WIP.
 * Pullups don't currently work.
 * `raw3wire` support may be added.
 * 1-Wire support may be added.
