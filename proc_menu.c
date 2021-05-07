@@ -533,20 +533,20 @@ void serviceuser(void) {
                                     bp_servo_setup();
                                 }
                                 break;
-
-                                // command for subsys (i2c, UART, etc)
-                            case '(': // Macros, NOPE
-                                cmdstart = (cmdstart + 1) & CMDLENMSK;
-                                sendw = getint();
-                                consumewhitechars();
-                                if (cmdbuf[((cmdstart) & CMDLENMSK)] == ')') {
-                                    enabled_protocols[bus_pirate_configuration.bus_mode].run_macro(sendw);
-                                    bpBR;
-                                } else {
-                                    mode_configuration.command_error = YES;
-                                }
-                                break;
         */
+        // command for subsys (i2c, UART, etc)
+        case '(': // Macros
+          cmdstart = (cmdstart + 1) & CMDLENMSK;
+          sendw = getint();
+          consumewhitechars();
+          if (cmdbuf[((cmdstart) & CMDLENMSK)] == ')') {
+            enabled_protocols[bus_pirate_configuration.bus_mode].run_macro(sendw);
+            bpBR;
+          } else {
+            mode_configuration.command_error = YES;
+          }
+          break;
+
         case '"':
           mode_configuration.command_error = YES;
           temp = 1;

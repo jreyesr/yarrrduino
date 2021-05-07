@@ -10,6 +10,7 @@
 * Menu navigation works.
 * The `raw2wire` protocol is fully implemented. That should mean I2C too, but the hard way.
 * ADC measurements work (both single measurements and continuous).
+* Macros (but I reserve the right to remove some macros found in the original BP if I deem them too specialized or low-use, in order to preserve that precious Flash space).
 
 ## Pending/won't implement functionality
 
@@ -27,7 +28,6 @@
 * The frequency counter doesn't work.
 * PWM/servo control is not implemented.
 * There is no self-test.
-* Macros will not be implemented.
 * BASIC scripting will not be even attempted. 
 * Direct I/O will not be implemented.
 * PIC programming and JTAG will not be implemented.
