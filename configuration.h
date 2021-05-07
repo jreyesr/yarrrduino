@@ -28,7 +28,7 @@ extern "C" {
 #define BP_TERMINAL_BUFFER_SIZE 128
 
 #define BP_ENABLE_RAW_2WIRE_SUPPORT
-//#define BP_ENABLE_I2C_SUPPORT
+#define BP_ENABLE_I2C_SUPPORT
 
 
 
@@ -37,4 +37,3 @@ extern "C" {
 #endif
 
 #endif	/* CONFIGURATION_H */
-

@@ -8,7 +8,8 @@
 ## Implemented functionality
 
 * Menu navigation works.
-* The `raw2wire` protocol is fully implemented. That should mean I2C too, but the hard way.
+* The `raw2wire` protocol is fully implemented.
+* The I2C protocol is fully implemented.
 * ADC measurements work (both single measurements and continuous).
 * Macros (but I reserve the right to remove some macros found in the original BP if I deem them too specialized or low-use, in order to preserve that precious Flash space).
 
@@ -16,8 +17,11 @@
 
 ### Pending but planned
 
+* Actually verify all implemented modes:
+  * Raw 2 wire
+  * I2C
+
 * There is no ADC measurement of voltage rails (for example, to detect a shorted VREG). It _may_ be implemented later, since the ADC already works.
-* Dedicated (soft) I2C support is a WIP.
 * Pullups don't currently work.
 * `raw3wire` support may be added.
 * 1-Wire support may be added.

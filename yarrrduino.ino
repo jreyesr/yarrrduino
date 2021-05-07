@@ -32,35 +32,8 @@ command_t last_command;
 /*
                          Main application
  */
-/*void print(char *str) {
-    for (; *str != '\0'; str++)
-        EUSART_Write(*str);
-}
-
-void println(char *str) {
-    print(str);
-    print("\r\n");
-}*/
 
 int main(void) {
-    // initialize the device
-    //SYSTEM_Initialize();
-
-    // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
-    // Use the following macros to:
-
-    // Enable the Global Interrupts
-    //INTERRUPT_GlobalInterruptEnable();
-
-    // Enable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptEnable();
-
-    // Disable the Global Interrupts
-    //INTERRUPT_GlobalInterruptDisable();
-
-    // Disable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptDisable();
-
     initialize_board();
 
     serviceuser();
@@ -70,10 +43,6 @@ int main(void) {
 
 void initialize_board(void) {
     volatile unsigned long delay = 0xFFFF;
-
-    //CLKRCONbits.CLKRDIV = 0;
-    /* Disable secondary oscillator. */
-    //T1CONbits.T1OSCEN = OFF;
 
     while (delay--) {
     }
